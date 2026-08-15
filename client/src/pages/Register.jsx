@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { CheckSquare, Eye, EyeOff, Lock, Mail, User, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function Register() {
@@ -11,40 +12,50 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const { register } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
 
-    // 1. Validate required fields
+    // 1. Client-Side Validation
     if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       setErrorMessage('Please fill in all required fields.');
       return;
     }
 
-    // 2. Validate email format
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(email)) {
       setErrorMessage('Please enter a valid email address.');
       return;
     }
 
-    // 3. Validate password length
     if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters long.');
       return;
     }
 
-    // 4. Validate password confirmation match
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match. Please try again.');
       return;
     }
 
-    // Demonstrate UI loading state (API connection will be integrated in backend phase)
+    // 2. Execute API Register Call
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const result = await register(name.trim(), email.trim(), password);
       setIsLoading(false);
-    }, 1500);
+
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setErrorMessage(result.message || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      setIsLoading(false);
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    }
   };
 
   return (

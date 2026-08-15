@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { CheckSquare, Eye, EyeOff, Lock, Mail, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function Login() {
@@ -9,11 +10,14 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
 
-    // Basic Validation
+    // 1. Client-Side Validation
     if (!email.trim() || !password.trim()) {
       setErrorMessage('Please fill in both email and password.');
       return;
@@ -30,12 +34,21 @@ export default function Login() {
       return;
     }
 
-    // Demonstrate UI loading state (API connection will be integrated in backend phase)
+    // 2. Execute API Login Call
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const result = await login(email.trim(), password);
       setIsLoading(false);
-      // UI state demo response
-    }, 1500);
+
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setErrorMessage(result.message || 'Login failed. Please check credentials.');
+      }
+    } catch (err) {
+      setIsLoading(false);
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    }
   };
 
   return (
@@ -134,7 +147,7 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Navigation Link to Register */}
+        {/* Footer Navigation Link to Register */}
         <div className="mt-6 pt-5 border-t border-slate-800/80 text-center">
           <p className="text-xs sm:text-sm text-slate-400">
             Don't have an account?{' '}
