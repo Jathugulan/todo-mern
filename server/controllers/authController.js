@@ -92,8 +92,8 @@ const loginUser = async (req, res, next) => {
       });
     }
 
-    // 2. Find user by email
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    // 2. Find user by email (include password for bcrypt comparison since select: false is set)
+    const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+password');
 
     // 3. Check user existence and compare password safely
     if (!user || !(await user.matchPassword(password))) {
