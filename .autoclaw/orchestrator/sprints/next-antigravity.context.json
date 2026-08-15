@@ -1,7 +1,7 @@
 {
   "schema": "autoclaw.contextPack.v1",
   "markdown_path": ".autoclaw/orchestrator/sprints/next-antigravity.context.md",
-  "generated_at": "2026-08-15T19:54:54.044Z",
+  "generated_at": "2026-08-15T20:00:24.190Z",
   "workspace_root_hash": "b5b6dc764cf163b0",
   "scope": {
     "task": "Next available work for antigravity: Auto-dispatched by orchestrator-loop. Agent antigravity is idle.",
@@ -124,7 +124,7 @@
       "mode: balanced",
       "query-mode: balanced"
     ],
-    "generated_at": "2026-08-15T19:54:54.044Z",
+    "generated_at": "2026-08-15T20:00:24.190Z",
     "mode": "balanced",
     "spine_block_ids": [
       "ctx:c:/users/jathu/desktop/todo-mern:project:root"

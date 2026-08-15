@@ -687,3 +687,16 @@
 {"at":"2026-08-15T19:59:54.116Z","tick":197,"phase":"health","action":"tick_start"}
 {"at":"2026-08-15T19:59:54.119Z","tick":197,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
 {"at":"2026-08-15T19:59:54.166Z","tick":197,"phase":"log","action":"tick_complete","detail":{"durationMs":48,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:00:24.130Z","tick":198,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:00:24.138Z","tick":198,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:00:24.710Z","tick":0,"phase":"dispatch","action":"context_pack_written","detail":{"taskId":"next-antigravity","file":".autoclaw/orchestrator/sprints/next-antigravity.context.md","degraded":true,"codeHits":0,"kgHits":6,"budget":{"task_type":"implement","mode":"balanced","query_mode":"balanced"}}}
+{"at":"2026-08-15T20:00:25.073Z","tick":0,"phase":"dispatch","action":"work_dispatched","detail":{"taskId":"next-antigravity","vendor":"antigravity"}}
+{"at":"2026-08-15T20:00:25.167Z","tick":198,"phase":"work","action":"spine_ingest","detail":{"events":3,"backfill_complete":[],"alarms":[],"budget_exhausted":false}}
+{"at":"2026-08-15T20:00:25.203Z","tick":198,"phase":"log","action":"tick_complete","detail":{"durationMs":1067,"workFound":1,"dispatched":1,"errors":0}}
+{"at":"2026-08-15T20:00:54.133Z","tick":199,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:00:54.148Z","tick":199,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:00:54.197Z","tick":199,"phase":"inbox","action":"next_dispatch_gc","detail":{"removed":1}}
+{"at":"2026-08-15T20:00:54.542Z","tick":199,"phase":"log","action":"tick_complete","detail":{"durationMs":391,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:01:24.144Z","tick":200,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:01:24.155Z","tick":200,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:01:24.355Z","tick":200,"phase":"log","action":"tick_complete","detail":{"durationMs":198,"workFound":0,"dispatched":0,"errors":0}}

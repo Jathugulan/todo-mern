@@ -1,14 +1,14 @@
 {
-  "id": "msg-claim-next-antigravity-msusoygh",
+  "id": "msg-claim-next-antigravity-msusw1k1",
   "from": "orchestrator-loop",
   "to": "shared",
   "type": "task_claim",
-  "timestamp": "2026-08-15T19:54:54.449Z",
+  "timestamp": "2026-08-15T20:00:25.057Z",
   "task_id": "next-antigravity",
   "payload": {
     "vendor": "antigravity",
     "priority": "low"
   },
   "requires_response": true,
-  "expires_at": "2026-08-15T20:24:54.449Z"
+  "expires_at": "2026-08-15T20:30:25.057Z"
 }
