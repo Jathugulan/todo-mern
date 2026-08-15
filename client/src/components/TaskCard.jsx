@@ -1,4 +1,4 @@
-import { Calendar, Check, Edit, Trash2, Tag, AlertCircle } from 'lucide-react';
+import { Calendar, Check, Edit, Trash2, AlertCircle } from 'lucide-react';
 
 export default function TaskCard({ task, onToggle, onEdit, onDelete }) {
   const categoryColors = {

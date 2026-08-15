@@ -6,7 +6,7 @@ import Dashboard from './pages/Dashboard';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  const { user, token, loading } = useAuth();
+  const { token, loading } = useAuth();
 
   if (loading) {
     return (
