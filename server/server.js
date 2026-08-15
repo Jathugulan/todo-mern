@@ -43,10 +43,32 @@ app.use((req, res, next) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-  console.error('Global Error Handler:', err.stack);
-  res.status(err.statusCode || 500).json({
+  console.error('Global Error Handler:', err.message || err);
+
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Internal Server Error';
+
+  // Mongoose bad ObjectId / CastError
+  if (err.name === 'CastError') {
+    statusCode = 400;
+    message = 'Invalid resource ID format';
+  }
+
+  // Mongoose duplicate key error (code 11000)
+  if (err.code === 11000) {
+    statusCode = 400;
+    message = 'An account with this email already exists';
+  }
+
+  // Mongoose validation error
+  if (err.name === 'ValidationError') {
+    statusCode = 400;
+    message = Object.values(err.errors).map((val) => val.message).join(', ');
+  }
+
+  res.status(statusCode).json({
     success: false,
-    message: err.message || 'Internal Server Error',
+    message,
   });
 });
 

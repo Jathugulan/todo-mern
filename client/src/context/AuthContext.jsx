@@ -41,7 +41,11 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
       }
     } catch (err) {
-      const msg = err.response?.data?.message || 'Login failed. Please check credentials.';
+      const msg =
+        err.response?.data?.message ||
+        (err.message === 'Network Error' || !err.response
+          ? 'Unable to connect to server. Please check your connection.'
+          : 'Login failed. Please check credentials.');
       setError(msg);
       return { success: false, message: msg };
     }
@@ -59,7 +63,11 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
       }
     } catch (err) {
-      const msg = err.response?.data?.message || 'Registration failed. Please try again.';
+      const msg =
+        err.response?.data?.message ||
+        (err.message === 'Network Error' || !err.response
+          ? 'Unable to connect to server. Please check your connection.'
+          : 'Registration failed. Please try again.');
       setError(msg);
       return { success: false, message: msg };
     }
