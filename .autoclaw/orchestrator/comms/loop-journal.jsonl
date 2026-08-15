@@ -715,3 +715,13 @@
 {"at":"2026-08-15T20:03:54.182Z","tick":205,"phase":"health","action":"tick_start"}
 {"at":"2026-08-15T20:03:54.192Z","tick":205,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
 {"at":"2026-08-15T20:03:54.337Z","tick":205,"phase":"log","action":"tick_complete","detail":{"durationMs":149,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:04:24.194Z","tick":206,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:04:24.200Z","tick":206,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:04:24.308Z","tick":206,"phase":"log","action":"tick_complete","detail":{"durationMs":110,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:04:54.194Z","tick":207,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:04:54.198Z","tick":207,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:04:54.231Z","tick":207,"phase":"log","action":"tick_complete","detail":{"durationMs":35,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:05:24.205Z","tick":208,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:05:24.211Z","tick":208,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:05:24.291Z","tick":208,"phase":"work","action":"spine_ingest","detail":{"events":1,"backfill_complete":[],"alarms":[],"budget_exhausted":false}}
+{"at":"2026-08-15T20:05:24.330Z","tick":208,"phase":"log","action":"tick_complete","detail":{"durationMs":121,"workFound":0,"dispatched":0,"errors":0}}
