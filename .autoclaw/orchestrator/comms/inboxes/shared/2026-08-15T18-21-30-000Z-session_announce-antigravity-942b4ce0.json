@@ -1,0 +1,15 @@
+{
+  "id": "msg-2026-08-15T18-21-30-000Z-942b4ce0",
+  "from": "antigravity",
+  "to": "shared",
+  "type": "session_announce",
+  "timestamp": "2026-08-15T18:21:30.000Z",
+  "requires_response": false,
+  "session_id": "942b4ce0-f7d4-40cd-ab07-c48babe6a153",
+  "payload": {
+    "current_task": null,
+    "branch": "main",
+    "file_scope": [],
+    "note": null
+  }
+}
