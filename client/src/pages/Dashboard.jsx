@@ -1,75 +1,145 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import TaskStats from '../components/TaskStats';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
-import { Plus, Sparkles, Filter } from 'lucide-react';
+import { Plus, Sparkles, Filter, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
 
-  // Initial local UI demo state (Task API integration will occur in task phase)
-  const [tasks, setTasks] = useState([
-    {
-      _id: '1',
-      title: 'Complete project documentation',
-      description: 'Write comprehensive guide and API references for the team.',
-      category: 'Work',
-      priority: 'High',
-      completed: false,
-      dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
-    },
-    {
-      _id: '2',
-      title: 'Review pull requests',
-      description: 'Check backend auth controller and Mongoose schemas.',
-      category: 'Work',
-      priority: 'Medium',
-      completed: true,
-      dueDate: new Date(Date.now() - 86400000).toISOString(),
-    },
-    {
-      _id: '3',
-      title: 'Buy groceries for the week',
-      description: 'Fresh vegetables, fruits, and snacks.',
-      category: 'Shopping',
-      priority: 'Low',
-      completed: false,
-      dueDate: null,
-    },
-  ]);
+  // Tasks and UI States
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
+  // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // all, pending, completed
+
+  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
 
-  // Local Task State Handlers
-  const handleToggleTask = (id) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task._id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  const handleDeleteTask = (id) => {
-    setTasks((prev) => prev.filter((task) => task._id !== id));
-  };
-
-  const handleSaveTask = (taskData) => {
-    if (taskToEdit) {
-      setTasks((prev) =>
-        prev.map((t) => (t._id === taskToEdit._id ? { ...t, ...taskData } : t))
-      );
+  // Helper for Toast Feedback
+  const showFeedback = (msg, type = 'success') => {
+    if (type === 'success') {
+      setSuccessMessage(msg);
+      setTimeout(() => setSuccessMessage(''), 3000);
     } else {
-      const newTask = {
-        _id: Date.now().toString(),
-        ...taskData,
-        completed: false,
-      };
-      setTasks((prev) => [newTask, ...prev]);
+      setErrorMessage(msg);
+      setTimeout(() => setErrorMessage(''), 4000);
+    }
+  };
+
+  // 1. Fetch Tasks from GET /api/tasks
+  const fetchTasks = useCallback(async () => {
+    setIsLoading(true);
+    setErrorMessage('');
+    try {
+      const res = await API.get('/tasks');
+      if (res.data.success) {
+        setTasks(res.data.data || []);
+      }
+    } catch (err) {
+      console.error('Fetch tasks error:', err);
+      setErrorMessage('Failed to fetch tasks from server. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  // 2. Mark Task Complete (Toggle Status)
+  const handleToggleTask = async (id) => {
+    const targetTask = tasks.find((t) => t._id === id);
+    if (!targetTask) return;
+
+    const newCompletedStatus = !targetTask.completed;
+
+    // Optimistic UI update
+    setTasks((prev) =>
+      prev.map((t) => (t._id === id ? { ...t, completed: newCompletedStatus } : t))
+    );
+
+    try {
+      const res = await API.put(`/tasks/${id}`, { completed: newCompletedStatus });
+      if (!res.data.success) {
+        // Revert on failure
+        fetchTasks();
+        showFeedback('Failed to update task status.', 'error');
+      } else {
+        showFeedback(
+          newCompletedStatus ? 'Task marked as completed! 🎉' : 'Task marked as pending.',
+          'success'
+        );
+      }
+    } catch (err) {
+      console.error('Toggle task error:', err);
+      fetchTasks();
+      showFeedback('Error updating task completion status.', 'error');
+    }
+  };
+
+  // 3. Delete Task with Confirmation
+  const handleDeleteTask = async (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this task?');
+    if (!confirmDelete) return;
+
+    // Optimistic remove
+    setTasks((prev) => prev.filter((t) => t._id !== id));
+
+    try {
+      const res = await API.delete(`/tasks/${id}`);
+      if (res.data.success) {
+        showFeedback('Task deleted successfully.', 'success');
+      } else {
+        fetchTasks();
+        showFeedback('Failed to delete task.', 'error');
+      }
+    } catch (err) {
+      console.error('Delete task error:', err);
+      fetchTasks();
+      showFeedback('Error deleting task.', 'error');
+    }
+  };
+
+  // 4. Create or Edit Task
+  const handleSaveTask = async (taskData) => {
+    if (taskToEdit) {
+      // PUT /api/tasks/:id
+      try {
+        const res = await API.put(`/tasks/${taskToEdit._id}`, taskData);
+        if (res.data.success) {
+          setTasks((prev) =>
+            prev.map((t) => (t._id === taskToEdit._id ? res.data.data : t))
+          );
+          showFeedback('Task updated successfully!', 'success');
+        }
+      } catch (err) {
+        console.error('Update task error:', err);
+        showFeedback('Failed to update task. Please check input.', 'error');
+        throw err;
+      }
+    } else {
+      // POST /api/tasks
+      try {
+        const res = await API.post('/tasks', taskData);
+        if (res.data.success) {
+          setTasks((prev) => [res.data.data, ...prev]);
+          showFeedback('Task created successfully! 🚀', 'success');
+        }
+      } catch (err) {
+        console.error('Create task error:', err);
+        showFeedback('Failed to create task. Please check input.', 'error');
+        throw err;
+      }
     }
   };
 
@@ -83,7 +153,7 @@ export default function Dashboard() {
     setIsModalOpen(true);
   };
 
-  // Filter tasks based on UI status filter and search query
+  // Filter tasks locally by status and search keyword
   const filteredTasks = tasks.filter((task) => {
     const matchesStatus =
       statusFilter === 'all'
@@ -94,7 +164,7 @@ export default function Dashboard() {
 
     const matchesSearch =
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
     return matchesStatus && matchesSearch;
   });
@@ -117,6 +187,21 @@ export default function Dashboard() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Toast Feedback Banners */}
+        {successMessage && (
+          <div className="mb-5 p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center gap-2.5 text-emerald-400 text-xs sm:text-sm animate-fade-in shadow-lg">
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{successMessage}</span>
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="mb-5 p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center gap-2.5 text-rose-400 text-xs sm:text-sm animate-fade-in shadow-lg">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
         {/* Welcome Section */}
         <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -173,7 +258,12 @@ export default function Dashboard() {
         </div>
 
         {/* Task List / Grid Area */}
-        {filteredTasks.length === 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="w-8 h-8 text-indigo-400 animate-spin mb-3" />
+            <p className="text-xs sm:text-sm text-slate-400">Loading your tasks...</p>
+          </div>
+        ) : filteredTasks.length === 0 ? (
           /* Empty State Component */
           <div className="glass-panel rounded-3xl p-8 sm:p-12 text-center max-w-lg mx-auto border border-slate-800 my-8 animate-fade-in">
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mx-auto mb-4">
@@ -209,7 +299,7 @@ export default function Dashboard() {
         )}
       </main>
 
-      {/* Reusable Task Creation / Edit Modal Component */}
+      {/* Task Creation / Edit Modal Component */}
       <TaskModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
