@@ -269,19 +269,33 @@ export default function Dashboard() {
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mx-auto mb-4">
               <Sparkles className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-100">No tasks found</h3>
+            <h3 className="text-base sm:text-lg font-bold text-slate-100">
+              {searchQuery ? `No tasks found matching "${searchQuery}"` : 'No tasks found'}
+            </h3>
             <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xs mx-auto">
-              {searchQuery || statusFilter !== 'all'
-                ? 'No tasks match your current filter or search criteria.'
+              {searchQuery
+                ? 'Try searching with a different title or keyword, or clear your search.'
+                : statusFilter !== 'all'
+                ? 'No tasks match your selected status filter.'
                 : 'Your task list is empty. Click below to create your first task!'}
             </p>
-            <button
-              onClick={handleOpenCreateModal}
-              className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Create Task</span>
-            </button>
+
+            {searchQuery ? (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold text-xs sm:text-sm rounded-xl border border-slate-700 transition-all"
+              >
+                <span>Clear Search Query</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleOpenCreateModal}
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Create Task</span>
+              </button>
+            )}
           </div>
         ) : (
           /* Task Card Grid */
