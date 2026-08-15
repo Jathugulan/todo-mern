@@ -1,17 +1,14 @@
 const mongoose = require('mongoose');
 
-const TaskSchema = new mongoose.Schema(
+// Task Schema Definition
+const taskSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
     title: {
       type: String,
-      required: [true, 'Please add a task title'],
+      required: [true, 'Task title is required'],
       trim: true,
-      maxlength: [120, 'Title cannot exceed 120 characters'],
+      minlength: [1, 'Title cannot be empty'],
+      maxlength: [150, 'Title cannot exceed 150 characters'],
     },
     description: {
       type: String,
@@ -24,20 +21,27 @@ const TaskSchema = new mongoose.Schema(
     },
     priority: {
       type: String,
-      enum: ['Low', 'Medium', 'High'],
-      default: 'Medium',
-    },
-    category: {
-      type: String,
-      enum: ['Work', 'Personal', 'Shopping', 'Health', 'General'],
-      default: 'General',
+      enum: {
+        values: ['low', 'medium', 'high'],
+        message: 'Priority must be low, medium, or high',
+      },
+      default: 'medium',
+      lowercase: true,
     },
     dueDate: {
       type: Date,
       default: null,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Task must belong to a user'],
+    },
   },
-  { timestamps: true }
+  {
+    // Automatically handles createdAt and updatedAt timestamps
+    timestamps: true,
+  }
 );
 
-module.exports = mongoose.model('Task', TaskSchema);
+module.exports = mongoose.model('Task', taskSchema);
