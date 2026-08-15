@@ -779,3 +779,12 @@
 {"at":"2026-08-15T20:12:54.356Z","tick":223,"phase":"health","action":"tick_start"}
 {"at":"2026-08-15T20:12:54.359Z","tick":223,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
 {"at":"2026-08-15T20:12:54.385Z","tick":223,"phase":"log","action":"tick_complete","detail":{"durationMs":27,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:13:24.360Z","tick":224,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:13:24.371Z","tick":224,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:13:24.551Z","tick":224,"phase":"log","action":"tick_complete","detail":{"durationMs":181,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:13:54.361Z","tick":225,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:13:54.363Z","tick":225,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:13:54.395Z","tick":225,"phase":"log","action":"tick_complete","detail":{"durationMs":33,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:14:24.376Z","tick":226,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:14:24.378Z","tick":226,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:14:24.414Z","tick":226,"phase":"log","action":"tick_complete","detail":{"durationMs":36,"workFound":0,"dispatched":0,"errors":0}}
