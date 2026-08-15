@@ -19,6 +19,7 @@ export default function Dashboard() {
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // all, pending, completed
+  const [priorityFilter, setPriorityFilter] = useState('all'); // all, high, medium, low
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -153,8 +154,9 @@ export default function Dashboard() {
     setIsModalOpen(true);
   };
 
-  // Filter tasks locally by status and search keyword
+  // Combined Filtering: Status + Priority + Search
   const filteredTasks = tasks.filter((task) => {
+    // 1. Status Filter
     const matchesStatus =
       statusFilter === 'all'
         ? true
@@ -162,12 +164,27 @@ export default function Dashboard() {
         ? task.completed
         : !task.completed;
 
-    const matchesSearch =
-      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
+    // 2. Priority Filter
+    const matchesPriority =
+      priorityFilter === 'all'
+        ? true
+        : (task.priority || '').toLowerCase() === priorityFilter.toLowerCase();
 
-    return matchesStatus && matchesSearch;
+    // 3. Search Query Filter (Title & Description)
+    const matchesSearch =
+      !searchQuery.trim() ||
+      task.title.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+      (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase().trim()));
+
+    return matchesStatus && matchesPriority && matchesSearch;
   });
+
+  // Reset all filters and search
+  const handleResetFilters = () => {
+    setStatusFilter('all');
+    setPriorityFilter('all');
+    setSearchQuery('');
+  };
 
   // Calculate Metrics
   const totalCount = tasks.length;
@@ -229,32 +246,70 @@ export default function Dashboard() {
           pending={pendingCount}
         />
 
-        {/* Status Filter Bar */}
-        <div className="glass-panel p-3 sm:p-4 rounded-2xl mb-6 border border-slate-800 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-indigo-400 hidden sm:inline" />
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider hidden sm:inline">Filter:</span>
-            <div className="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800">
-              {['all', 'pending', 'completed'].map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setStatusFilter(status)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
-                    statusFilter === status
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/20'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  {status}
-                </button>
-              ))}
+        {/* Combined Filter Bar: Status + Priority */}
+        <div className="glass-panel p-3 sm:p-4 rounded-2xl mb-6 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-indigo-400" />
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider hidden sm:inline">Status:</span>
+              <div className="flex items-center gap-1 p-1 bg-slate-900/90 rounded-xl border border-slate-800">
+                {['all', 'pending', 'completed'].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => setStatusFilter(status)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
+                      statusFilter === status
+                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/20'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Priority Filter */}
+            <div className="flex items-center gap-2 border-l border-slate-800/80 pl-3">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider hidden sm:inline">Priority:</span>
+              <div className="flex items-center gap-1 p-1 bg-slate-900/90 rounded-xl border border-slate-800">
+                {[
+                  { label: 'All', value: 'all' },
+                  { label: 'High', value: 'high' },
+                  { label: 'Medium', value: 'medium' },
+                  { label: 'Low', value: 'low' },
+                ].map((item) => (
+                  <button
+                    key={item.value}
+                    onClick={() => setPriorityFilter(item.value)}
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
+                      priorityFilter === item.value
+                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/20'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <p className="text-xs text-slate-400 font-medium">
-            Showing <span className="text-slate-200 font-bold">{filteredTasks.length}</span> of{' '}
-            <span className="text-slate-200 font-bold">{totalCount}</span> tasks
-          </p>
+          <div className="flex items-center justify-between md:justify-end gap-3">
+            {(statusFilter !== 'all' || priorityFilter !== 'all' || searchQuery) && (
+              <button
+                onClick={handleResetFilters}
+                className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold underline underline-offset-2 transition-colors"
+              >
+                Reset All Filters
+              </button>
+            )}
+
+            <p className="text-xs text-slate-400 font-medium shrink-0">
+              Showing <span className="text-slate-200 font-bold">{filteredTasks.length}</span> of{' '}
+              <span className="text-slate-200 font-bold">{totalCount}</span> tasks
+            </p>
+          </div>
         </div>
 
         {/* Task List / Grid Area */}
