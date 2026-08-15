@@ -5,8 +5,8 @@
   "active_manager": {
     "instance_id": "orchestrator-loop-4e5ca8",
     "acquired_at": "2026-08-15T18:21:24.222Z",
-    "lease_heartbeat": "2026-08-15T20:02:54.658Z",
-    "lease_expires": "2026-08-15T20:04:24.658Z"
+    "lease_heartbeat": "2026-08-15T20:03:54.797Z",
+    "lease_expires": "2026-08-15T20:05:24.797Z"
   },
   "standbys": [],
   "monitors": [],
