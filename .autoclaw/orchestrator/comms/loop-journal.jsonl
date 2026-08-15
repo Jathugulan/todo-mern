@@ -788,3 +788,16 @@
 {"at":"2026-08-15T20:14:24.376Z","tick":226,"phase":"health","action":"tick_start"}
 {"at":"2026-08-15T20:14:24.378Z","tick":226,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
 {"at":"2026-08-15T20:14:24.414Z","tick":226,"phase":"log","action":"tick_complete","detail":{"durationMs":36,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:14:54.380Z","tick":227,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:14:54.384Z","tick":227,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:14:54.456Z","tick":227,"phase":"log","action":"tick_complete","detail":{"durationMs":73,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:15:24.384Z","tick":228,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:15:24.388Z","tick":228,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:15:24.415Z","tick":228,"phase":"work","action":"spine_ingest","detail":{"events":1,"backfill_complete":[],"alarms":[],"budget_exhausted":false}}
+{"at":"2026-08-15T20:15:24.425Z","tick":228,"phase":"log","action":"tick_complete","detail":{"durationMs":40,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:15:54.397Z","tick":229,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:15:54.403Z","tick":229,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:15:54.467Z","tick":229,"phase":"log","action":"tick_complete","detail":{"durationMs":68,"workFound":0,"dispatched":0,"errors":0}}
+{"at":"2026-08-15T20:16:24.403Z","tick":230,"phase":"health","action":"tick_start"}
+{"at":"2026-08-15T20:16:24.410Z","tick":230,"phase":"inbox","action":"scan_complete","detail":{"healthy":1,"stalled":0,"dead":1}}
+{"at":"2026-08-15T20:16:24.457Z","tick":230,"phase":"log","action":"tick_complete","detail":{"durationMs":52,"workFound":0,"dispatched":0,"errors":0}}

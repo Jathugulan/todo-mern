@@ -40,7 +40,7 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) {
-      setFormError('Title is required');
+      setFormError('Task title is required');
       return;
     }
 
@@ -65,25 +65,26 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-      <div className="glass-panel w-full max-w-lg rounded-3xl border border-slate-700/60 shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+      <div className="glass-panel w-full max-w-lg rounded-3xl border border-slate-700/60 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <h2 className="text-lg font-bold text-slate-100">
+        <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-slate-800 shrink-0">
+          <h2 className="text-base sm:text-lg font-bold text-slate-100">
             {taskToEdit ? 'Edit Task' : 'Create New Task'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl transition-all"
+            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl transition-all"
+            title="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1">
           {formError && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-2 text-rose-400 text-xs">
+            <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-2.5 text-rose-400 text-xs sm:text-sm">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{formError}</span>
             </div>
@@ -99,7 +100,7 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
               placeholder="What needs to be done?"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="glass-input w-full px-4 py-2.5 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none transition-all"
+              className="glass-input w-full px-4 py-2.5 sm:py-3 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none transition-all"
               autoFocus
             />
           </div>
@@ -114,12 +115,12 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
               placeholder="Add extra context, steps, or details..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="glass-input w-full px-4 py-2.5 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none transition-all resize-none"
+              className="glass-input w-full px-4 py-2.5 sm:py-3 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none transition-all resize-none"
             />
           </div>
 
           {/* Grid: Category & Priority */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5 text-indigo-400" />
@@ -128,7 +129,7 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="glass-input w-full px-3 py-2.5 rounded-xl text-slate-200 text-sm focus:outline-none transition-all"
+                className="glass-input w-full px-3.5 py-2.5 sm:py-3 rounded-xl text-slate-200 text-sm focus:outline-none transition-all"
               >
                 <option value="General" className="bg-slate-900">General</option>
                 <option value="Work" className="bg-slate-900">Work</option>
@@ -145,7 +146,7 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="glass-input w-full px-3 py-2.5 rounded-xl text-slate-200 text-sm focus:outline-none transition-all"
+                className="glass-input w-full px-3.5 py-2.5 sm:py-3 rounded-xl text-slate-200 text-sm focus:outline-none transition-all"
               >
                 <option value="Low" className="bg-slate-900">Low Priority</option>
                 <option value="Medium" className="bg-slate-900">Medium Priority</option>
@@ -164,23 +165,23 @@ export default function TaskModal({ isOpen, onClose, onSave, taskToEdit }) {
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="glass-input w-full px-4 py-2.5 rounded-xl text-slate-200 text-sm focus:outline-none transition-all"
+              className="glass-input w-full px-4 py-2.5 sm:py-3 rounded-xl text-slate-200 text-sm focus:outline-none transition-all"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-slate-400 hover:text-slate-200 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all"
+              className="px-4 py-2.5 text-slate-400 hover:text-slate-200 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50"
+              className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50"
             >
               {isSubmitting ? 'Saving...' : taskToEdit ? 'Update Task' : 'Create Task'}
             </button>
