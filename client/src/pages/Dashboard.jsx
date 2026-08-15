@@ -186,10 +186,11 @@ export default function Dashboard() {
     setSearchQuery('');
   };
 
-  // Calculate Metrics
+  // Calculate Metrics from existing task data
   const totalCount = tasks.length;
   const completedCount = tasks.filter((t) => t.completed).length;
   const pendingCount = totalCount - completedCount;
+  const highPriorityCount = tasks.filter((t) => (t.priority || '').toLowerCase() === 'high').length;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -244,6 +245,7 @@ export default function Dashboard() {
           total={totalCount}
           completed={completedCount}
           pending={pendingCount}
+          highPriority={highPriorityCount}
         />
 
         {/* Combined Filter Bar: Status + Priority */}
